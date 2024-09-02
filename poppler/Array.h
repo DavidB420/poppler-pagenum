@@ -71,6 +71,7 @@ public:
 
     // Accessors.
     Object get(int i, int recursion = 0) const;
+    std::vector<Object> elems; // array of elements
     // Same as above but if the returned object is a fetched Ref returns such Ref in returnRef, otherwise returnRef is Ref::INVALID()
     Object get(int i, Ref *returnRef, int recursion = 0) const;
     const Object &getNF(int i) const;
@@ -84,7 +85,6 @@ private:
     int decRef() { return --ref; }
 
     XRef *xref; // the xref table for this PDF file
-    std::vector<Object> elems; // array of elements
     std::atomic_int ref; // reference count
     mutable std::recursive_mutex mutex;
 };

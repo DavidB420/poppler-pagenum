@@ -94,6 +94,7 @@ public:
     OutlineItem &operator=(const OutlineItem &) = delete;
     static std::vector<OutlineItem *> *readItemList(OutlineItem *parent, const Object *firstItemRef, XRef *xrefA, PDFDoc *docA);
     const std::vector<Unicode> &getTitle() const { return title; }
+    const int &getPageNum() const { return pageNum; }
     void setTitle(const std::string &titleA);
     bool setPageDest(int i);
     // OutlineItem keeps the ownership of the action
@@ -114,6 +115,7 @@ private:
     PDFDoc *doc;
     XRef *xref;
     std::vector<Unicode> title;
+    int pageNum;
     std::unique_ptr<LinkAction> action;
     bool startsOpen;
     std::vector<OutlineItem *> *kids; // nullptr if this item is closed or has no kids

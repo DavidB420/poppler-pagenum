@@ -93,6 +93,7 @@ static void insertChildHelper(const std::string &itemTitle, int destPageNum, uns
 
     GooString *g = new GooString(itemTitle);
     outlineItem.dictSet("Title", Object(g));
+    outlineItem.dictSet("PageNum", Object(destPageNum));
     outlineItem.dictSet("Dest", Object(a));
     outlineItem.dictSet("Count", Object(1));
     outlineItem.dictAdd("Parent", Object(parentObjRef));
@@ -419,10 +420,26 @@ OutlineItem::OutlineItem(const Dict *dict, Ref refA, OutlineItem *parentA, XRef 
     obj1 = dict->lookup("Dest");
     if (!obj1.isNull()) {
         action = LinkAction::parseDest(&obj1);
+        LinkGoTo *pageLink = new LinkGoTo(&obj1);
+        if (pageLink->getDest() != NULL)
+            pageNum = docA->getCatalog()->findPage(pageLink->getDest()->getPageRef());
+        else
+            pageNum = 0;
+        delete pageLink;
     } else {
         obj1 = dict->lookup("A");
         if (!obj1.isNull()) {
             action = LinkAction::parseAction(&obj1);
+            Object obj2 = obj1.dictLookup("S");
+            if (obj2.isName("GoTo")) {
+                Object obj3 = obj1.dictLookup("D");
+                LinkGoTo *pageLink = new LinkGoTo(&obj3);
+                if (pageLink->getDest() != NULL)
+                    pageNum = docA->getCatalog()->findPage(pageLink->getDest()->getPageRef());
+                else
+                    pageNum = 0;
+                delete pageLink;
+            }
         }
     }
 

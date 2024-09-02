@@ -63,6 +63,7 @@ toc_item_private::~toc_item_private()
 void toc_item_private::load(const OutlineItem *item)
 {
     const std::vector<Unicode> &title_unicode = item->getTitle();
+    destPageNum = item->getPageNum();
     title = detail::unicode_to_ustring(title_unicode.data(), title_unicode.size());
     is_open = item->isOpen();
 }
@@ -146,6 +147,14 @@ toc_item::~toc_item()
 ustring toc_item::title() const
 {
     return d->title;
+}
+
+/**
+ \returns the page number of the TOC item
+ */
+int poppler::toc_item::destPageNum() const
+{
+    return d->destPageNum;
 }
 
 /**

@@ -52,6 +52,7 @@ public:
     ~toc_item();
 
     ustring title() const;
+    int destPageNum() const;
     bool is_open() const;
 
     std::vector<toc_item *> children() const;

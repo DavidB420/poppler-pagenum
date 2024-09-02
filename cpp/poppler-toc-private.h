@@ -56,6 +56,7 @@ public:
 
     std::vector<toc_item *> children;
     ustring title;
+    int destPageNum;
     bool is_open;
 };
 

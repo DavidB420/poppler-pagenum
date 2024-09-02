@@ -92,10 +92,11 @@ public:
     // A List of the next actions to execute in order.
     const std::vector<std::unique_ptr<LinkAction>> &nextActions() const;
 
+    std::vector<std::unique_ptr<LinkAction>> nextActionList;
+
 private:
     static std::unique_ptr<LinkAction> parseAction(const Object *obj, const std::optional<std::string> &baseURI, std::set<int> *seenNextActions);
 
-    std::vector<std::unique_ptr<LinkAction>> nextActionList;
 };
 
 //------------------------------------------------------------------------

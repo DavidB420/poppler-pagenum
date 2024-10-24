@@ -423,8 +423,10 @@ OutlineItem::OutlineItem(const Dict *dict, Ref refA, OutlineItem *parentA, XRef 
         LinkGoTo *pageLink = new LinkGoTo(&obj1);
         if (pageLink->getDest() != NULL)
             pageNum = docA->getCatalog()->findPage(pageLink->getDest()->getPageRef());
-        else
-            pageNum = 0;
+        else {
+            const GooString *namedDest = pageLink->getNamedDest();
+            pageNum = namedDest == NULL ? 0 : findNumber(namedDest);
+        }
         delete pageLink;
     } else {
         obj1 = dict->lookup("A");
@@ -436,8 +438,10 @@ OutlineItem::OutlineItem(const Dict *dict, Ref refA, OutlineItem *parentA, XRef 
                 LinkGoTo *pageLink = new LinkGoTo(&obj3);
                 if (pageLink->getDest() != NULL)
                     pageNum = docA->getCatalog()->findPage(pageLink->getDest()->getPageRef());
-                else
-                    pageNum = 0;
+                else {
+                    const GooString *namedDest = pageLink->getNamedDest();
+                    pageNum = namedDest == NULL ? 0 : findNumber(namedDest);
+                }
                 delete pageLink;
             }
         }
@@ -451,6 +455,24 @@ OutlineItem::OutlineItem(const Dict *dict, Ref refA, OutlineItem *parentA, XRef 
         }
     }
 }
+
+int OutlineItem::findNumber(const GooString *testDest)
+{
+    for (int i = 0; i < testDest->getLength(); i++) {
+        if (testDest->getChar(i) == 'p' || testDest->getChar(i) == 'P') {
+            std::string newStr;
+            for (int j = 0; j < testDest->getLength(); j++) {
+                if (testDest->getChar(j) >= '0' && testDest->getChar(j) <= '9')
+                    newStr.push_back(testDest->getChar(j));
+            }
+
+            return std::stoi(newStr);
+        }
+    }
+
+    return 0;
+}
+
 
 OutlineItem::~OutlineItem()
 {

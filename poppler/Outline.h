@@ -119,6 +119,7 @@ private:
     std::unique_ptr<LinkAction> action;
     bool startsOpen;
     std::vector<OutlineItem *> *kids; // nullptr if this item is closed or has no kids
+    int findNumber(const GooString *testDest);
 };
 
 #endif
